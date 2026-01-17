@@ -68,30 +68,30 @@ set "RST=!ESC![0m"
 :main_menu
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::   ######   ###   ####   ##   ## ##      ##      ######  ##         :: !RST!
-echo !RED!  ::   ##      ## ##  ##  ## ##   ## ##      ##        ##    ##         :: !RST!
-echo !RED!  ::   #####  ####### ##  ## ####### ##      ##        ##    ##         :: !RST!
-echo !RED!  ::   ##     ##   ## ##  ## ##   ## ##      ##        ##    ##         :: !RST!
-echo !RED!  ::   ##     ##   ## ####   ##   ## ######  ######  ######  ######     :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::                  AI CODE ASSISTANT LAUNCHER                        :: !RST!
-echo !RED!  ::                          by Fadhli                                 :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ======================================================================== !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [1]   Claude Code              -   Anthropic AI Assistant       :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [2]   Factory Droid            -   Factory AI Agent             :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [3]   OpenCode                 -   Open Source AI Coder         :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [4]   CLIProxyAPIPlus Manager  -   Copilot, Kiro, Gemini        :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [5]   Keluar                                                    :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::    ######   ###   ####   ##   ## ##      ##      ######  ##          :: !RST!
+echo !RED!  ::    ##      ## ##  ##  ## ##   ## ##      ##        ##    ##          :: !RST!
+echo !RED!  ::    #####  ####### ##  ## ####### ##      ##        ##    ##          :: !RST!
+echo !RED!  ::    ##     ##   ## ##  ## ##   ## ##      ##        ##    ##          :: !RST!
+echo !RED!  ::    ##     ##   ## ####   ##   ## ######  ######  ######  ######      :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::                   AI CODE ASSISTANT LAUNCHER                         :: !RST!
+echo !RED!  ::                           by Fadhli                                  :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ========================================================================== !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [1]  Claude Code               -  Anthropic AI Assistant          :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [2]  Factory Droid             -  Factory AI Agent                :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [3]  OpenCode                  -  Open Source AI Coder            :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [4]  CLIProxyAPIPlus Manager   -  Copilot, Kiro, Gemini           :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [5]  Keluar                                                       :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 set /p "choice=        Pilih AI Assistant [1-5]: "
@@ -122,22 +122,22 @@ exit /b 0
 :claude_code
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::          #####  ##      ###   ##   ## ####   #####                 :: !RST!
-echo !RED!  ::         ##      ##     ## ##  ##   ## ##  ## ##                    :: !RST!
-echo !RED!  ::         ##      ##    ####### ##   ## ##  ## #####                 :: !RST!
-echo !RED!  ::         ##      ##    ##   ## ##   ## ##  ## ##                    :: !RST!
-echo !RED!  ::          #####  ##### ##   ##  #####  ####   #####                 :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::                     CLAUDE CODE LAUNCHER                           :: !RST!
-echo !RED!  ::                          by Fadhli                                 :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ======================================================================== !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::                     KONFIGURASI MODEL                              :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::           #####  ##      ###   ##   ## ####   #####                  :: !RST!
+echo !RED!  ::          ##      ##     ## ##  ##   ## ##  ## ##                     :: !RST!
+echo !RED!  ::          ##      ##    ####### ##   ## ##  ## #####                  :: !RST!
+echo !RED!  ::          ##      ##    ##   ## ##   ## ##  ## ##                     :: !RST!
+echo !RED!  ::           #####  ##### ##   ##  #####  ####   #####                  :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::                      CLAUDE CODE LAUNCHER                            :: !RST!
+echo !RED!  ::                           by Fadhli                                  :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ========================================================================== !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::                      KONFIGURASI MODEL                               :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Read current settings
@@ -154,20 +154,20 @@ echo !WHT!      OPUS   : !GRN!!CURRENT_OPUS!!RST!
 echo !WHT!      SONNET : !GRN!!CURRENT_SONNET!!RST!
 echo !WHT!      HAIKU  : !GRN!!CURRENT_HAIKU!!RST!
 echo.
-echo !WHT!  ======================================================================== !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !YEL!  ::    === PILIHAN MENU ===                                            :: !RST!
-echo !WHT!  ::    [1]   Lanjut dengan model saat ini                              :: !RST!
-echo !WHT!  ::    [2]   Ganti Model OPUS                                          :: !RST!
-echo !WHT!  ::    [3]   Ganti Model SONNET                                        :: !RST!
-echo !WHT!  ::    [4]   Ganti Model HAIKU                                         :: !RST!
-echo !WHT!  ::    [5]   Lihat Model Tersedia (dari API)                           :: !RST!
-echo !WHT!  ::    [6]   Quick Preset - Gemini Thinking                            :: !RST!
-echo !WHT!  ::    [7]   Quick Preset - Kiro                                       :: !RST!
-echo !WHT!  ::    [8]   Quick Preset - Copilot                                    :: !RST!
-echo !WHT!  ::    [0]   Kembali ke Menu Utama                                     :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !WHT!  ========================================================================== !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !YEL!  ::    === PILIHAN MENU ===                                              :: !RST!
+echo !WHT!  ::    [1]  Lanjut dengan model saat ini                                 :: !RST!
+echo !WHT!  ::    [2]  Ganti Model OPUS                                             :: !RST!
+echo !WHT!  ::    [3]  Ganti Model SONNET                                           :: !RST!
+echo !WHT!  ::    [4]  Ganti Model HAIKU                                            :: !RST!
+echo !WHT!  ::    [5]  Lihat Model Tersedia (dari API)                              :: !RST!
+echo !WHT!  ::    [6]  Quick Preset - Gemini Thinking                               :: !RST!
+echo !WHT!  ::    [7]  Quick Preset - Kiro                                          :: !RST!
+echo !WHT!  ::    [8]  Quick Preset - Copilot                                       :: !RST!
+echo !WHT!  ::    [0]  Kembali ke Menu Utama                                        :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 set /p "cc_choice=      Pilih opsi [0-8]: "
@@ -188,9 +188,9 @@ goto claude_code
 :claude_list_models
 cls
 echo.
-echo !CYN!  ======================================================================== !RST!
-echo !CYN!  ::                    MODEL TERSEDIA DARI API                         :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !CYN!  ========================================================================== !RST!
+echo !CYN!  ::                     MODEL TERSEDIA DARI API                          :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !YEL!      Mengambil daftar model dari http://127.0.0.1:8317...!RST!
 echo.
@@ -222,9 +222,9 @@ goto claude_code
 :claude_set_opus
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::                      SET MODEL OPUS                                :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                       SET MODEL OPUS                                 :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Model OPUS saat ini: !GRN!!CURRENT_OPUS!!RST!
 echo.
@@ -311,9 +311,9 @@ goto claude_code
 :claude_set_sonnet
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::                     SET MODEL SONNET                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                      SET MODEL SONNET                                :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Model SONNET saat ini: !GRN!!CURRENT_SONNET!!RST!
 echo.
@@ -400,9 +400,9 @@ goto claude_code
 :claude_set_haiku
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::                      SET MODEL HAIKU                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                       SET MODEL HAIKU                                :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Model HAIKU saat ini: !GRN!!CURRENT_HAIKU!!RST!
 echo.
@@ -531,11 +531,11 @@ goto claude_code
 :claude_select_folder
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                     CLAUDE CODE LAUNCHER                           :: !RST!
-echo !WHT!  ======================================================================== !RST!
-echo !WHT!  ::                     PILIH FOLDER PROJECT                           :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                      CLAUDE CODE LAUNCHER                            :: !RST!
+echo !WHT!  ========================================================================== !RST!
+echo !WHT!  ::                      PILIH FOLDER PROJECT                            :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Membuka dialog pemilihan folder...!RST!
 
@@ -561,22 +561,22 @@ goto main_menu
 :droid
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::           ####   ####    ###   ##  ####                            :: !RST!
-echo !RED!  ::           ##  ## ##  ## ## ##  ## ##  ##                           :: !RST!
-echo !RED!  ::           ##  ## ####   ## ##  ## ##  ##                           :: !RST!
-echo !RED!  ::           ##  ## ##  ## ## ##  ## ##  ##                           :: !RST!
-echo !RED!  ::           ####   ##  ##  ###   ## ####                             :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::                    FACTORY AI DROID                                :: !RST!
-echo !RED!  ::                        by Fadhli                                   :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ======================================================================== !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::                     PILIH FOLDER PROJECT                           :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::            ####   ####    ###   ##  ####                             :: !RST!
+echo !RED!  ::            ##  ## ##  ## ## ##  ## ##  ##                            :: !RST!
+echo !RED!  ::            ##  ## ####   ## ##  ## ##  ##                            :: !RST!
+echo !RED!  ::            ##  ## ##  ## ## ##  ## ##  ##                            :: !RST!
+echo !RED!  ::            ####   ##  ##  ###   ## ####                              :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::                     FACTORY AI DROID                                 :: !RST!
+echo !RED!  ::                         by Fadhli                                    :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ========================================================================== !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::                      PILIH FOLDER PROJECT                            :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Membuka dialog pemilihan folder...!RST!
 
@@ -602,22 +602,22 @@ goto main_menu
 :opencode
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::    ####   ####   #####  ##   ##  #####  ####   ####   #####        :: !RST!
-echo !RED!  ::   ##  ## ##  ## ##     ####  ## ##     ##  ## ##  ## ##            :: !RST!
-echo !RED!  ::   ##  ## ####   #####  ## ## ## ##     ##  ## ##  ## #####         :: !RST!
-echo !RED!  ::   ##  ## ##     ##     ##  #### ##     ##  ## ##  ## ##            :: !RST!
-echo !RED!  ::    ####  ##     #####  ##   ###  ##### ####   ####   #####         :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::                        OPENCODE AI                                 :: !RST!
-echo !RED!  ::                         by Fadhli                                  :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ======================================================================== !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::                     PILIH FOLDER PROJECT                           :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::     ####   ####   #####  ##   ##  #####  ####   ####   #####         :: !RST!
+echo !RED!  ::    ##  ## ##  ## ##     ####  ## ##     ##  ## ##  ## ##             :: !RST!
+echo !RED!  ::    ##  ## ####   #####  ## ## ## ##     ##  ## ##  ## #####          :: !RST!
+echo !RED!  ::    ##  ## ##     ##     ##  #### ##     ##  ## ##  ## ##             :: !RST!
+echo !RED!  ::     ####  ##     #####  ##   ###  ##### ####   ####   #####          :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::                         OPENCODE AI                                  :: !RST!
+echo !RED!  ::                          by Fadhli                                   :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ========================================================================== !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::                      PILIH FOLDER PROJECT                            :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Membuka dialog pemilihan folder...!RST!
 
@@ -643,62 +643,62 @@ goto main_menu
 :cliproxyplus_manager
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::    #####  ##     ##  ####   ####    ###   ##  ## ##   ##           :: !RST!
-echo !RED!  ::   ##      ##     ## ##  ## ##  ##  ## ##   ## ##   ## ##           :: !RST!
-echo !RED!  ::   ##      ##     ## ####   ####   ## ##     ###     ###            :: !RST!
-echo !RED!  ::   ##      ##     ## ##     ##  ## ## ##    ## ##     ##            :: !RST!
-echo !RED!  ::    #####  ###### ## ##     ##  ##  ###    ##  ##    ##             :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ::              CLIProxyAPIPlus MANAGER                               :: !RST!
-echo !RED!  ::           GitHub Copilot + Kiro + Gemini + Codex                   :: !RST!
-echo !RED!  ::                        by Fadhli                                   :: !RST!
-echo !RED!  ::                                                                    :: !RST!
-echo !RED!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::     #####  ##     ##  ####   ####    ###   ##  ## ##   ##            :: !RST!
+echo !RED!  ::    ##      ##     ## ##  ## ##  ##  ## ##   ## ##   ## ##            :: !RST!
+echo !RED!  ::    ##      ##     ## ####   ####   ## ##     ###     ###             :: !RST!
+echo !RED!  ::    ##      ##     ## ##     ##  ## ## ##    ## ##     ##             :: !RST!
+echo !RED!  ::     #####  ###### ## ##     ##  ##  ###    ##  ##    ##              :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ::                   CLIProxyAPIPlus MANAGER                            :: !RST!
+echo !RED!  ::            GitHub Copilot + Kiro + Gemini + Codex                    :: !RST!
+echo !RED!  ::                         by Fadhli                                    :: !RST!
+echo !RED!  ::                                                                      :: !RST!
+echo !RED!  ========================================================================== !RST!
 echo !WHT!  ::  Plus: !GRN!!CLIPROXY_PLUS_VER!!WHT!  ^|  Standard: !CYN!!CLIPROXY_STD_VER!!RST!
-echo !WHT!  ======================================================================== !RST!
-echo !WHT!  ::    === AKUN MANAGEMENT ===                                         :: !RST!
-echo !WHT!  ::    [1]   Lihat Semua Akun                                          :: !RST!
-echo !WHT!  ::    [2]   Hapus Akun                                                :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !GRN!  ::    === LOGIN PROVIDER ===                                          :: !RST!
-echo !GRN!  ::    [3]   Login GitHub Copilot           [Device Flow]              :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !CYN!  ::    === KIRO (AWS CodeWhisperer) ===                                :: !RST!
-echo !CYN!  ::    [4]   Kiro - Google OAuth            [Browser]                  :: !RST!
-echo !CYN!  ::    [5]   Kiro - AWS Builder ID          [Auth Code - Recommended]  :: !RST!
-echo !CYN!  ::    [6]   Kiro - Import dari IDE         [Auto - Best Method]       :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !YEL!  ::    === OTHER PROVIDERS ===                                         :: !RST!
-echo !YEL!  ::    [7]   Login Google/Antigravity       [Browser]                  :: !RST!
-echo !YEL!  ::    [8]   Login ChatGPT/Codex            [Browser]                  :: !RST!
-echo !YEL!  ::    [9]   Login Claude                   [Browser]                  :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    === SERVER ===                                                  :: !RST!
-echo !WHT!  ::    [10]  Start CLIProxyAPIPlus Server      [Port 8317]              :: !RST!
-echo !WHT!  ::    [11]  Lihat Model Tersedia                                      :: !RST!
-echo !WHT!  ::    [12]  Buka Dashboard Management         [Web Browser]           :: !RST!
-echo !WHT!  ::    [13]  Hentikan Server Port 8317                                 :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !CYN!  ::    === CLIPROXY STANDARD (Non-Plus) ===                            :: !RST!
-echo !CYN!  ::    [14]  Start CLIProxyAPI Standard Server [Port 8317]             :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !MAG!  ::    === CLOUDFLARE TUNNEL (Remote Access) ===                       :: !RST!
-echo !MAG!  ::    [15]  Start Cloudflare Tunnel            [api.fadproxy.my.id]   :: !RST!
-echo !MAG!  ::    [16]  Stop Cloudflare Tunnel                                    :: !RST!
-echo !MAG!  ::    [17]  Cek Status Tunnel                                         :: !RST!
-echo !MAG!  ::    [18]  Install Tunnel as Windows Service  [Auto-Start]           :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !BLU!  ::    === UPDATE / INSTALL ===                                        :: !RST!
-echo !BLU!  ::    [19]  Cek Versi Terbaru CLIProxyAPI                             :: !RST!
-echo !BLU!  ::    [20]  Auto Update CLIProxyAPIPlus        [Windows]              :: !RST!
-echo !BLU!  ::    [21]  Auto Update CLIProxyAPI Standard   [Windows]              :: !RST!
-echo !BLU!  ::    [22]  Install untuk OS Lain              [Linux/macOS]          :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ::    [0]   Kembali ke Menu Utama                                     :: !RST!
-echo !WHT!  ::                                                                    :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !WHT!  ========================================================================== !RST!
+echo !WHT!  ::    === AKUN MANAGEMENT ===                                           :: !RST!
+echo !WHT!  ::    [1]  Lihat Semua Akun                                             :: !RST!
+echo !WHT!  ::    [2]  Hapus Akun                                                   :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !GRN!  ::    === LOGIN PROVIDER ===                                            :: !RST!
+echo !GRN!  ::    [3]  Login GitHub Copilot            [Device Flow]                :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !CYN!  ::    === KIRO (AWS CodeWhisperer) ===                                  :: !RST!
+echo !CYN!  ::    [4]  Kiro - Google OAuth             [Browser]                    :: !RST!
+echo !CYN!  ::    [5]  Kiro - AWS Builder ID           [Recommended]                :: !RST!
+echo !CYN!  ::    [6]  Kiro - Import dari IDE          [Auto - Best]                :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !YEL!  ::    === OTHER PROVIDERS ===                                           :: !RST!
+echo !YEL!  ::    [7]  Login Google/Antigravity        [Browser]                    :: !RST!
+echo !YEL!  ::    [8]  Login ChatGPT/Codex             [Browser]                    :: !RST!
+echo !YEL!  ::    [9]  Login Claude                    [Browser]                    :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    === SERVER ===                                                    :: !RST!
+echo !WHT!  ::    [10] Start CLIProxyAPIPlus Server    [Port 8317]                  :: !RST!
+echo !WHT!  ::    [11] Lihat Model Tersedia                                         :: !RST!
+echo !WHT!  ::    [12] Buka Dashboard Management       [Web Browser]                :: !RST!
+echo !WHT!  ::    [13] Hentikan Server Port 8317                                    :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !CYN!  ::    === CLIPROXY STANDARD (Non-Plus) ===                              :: !RST!
+echo !CYN!  ::    [14] Start CLIProxyAPI Standard      [Port 8317]                  :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !MAG!  ::    === CLOUDFLARE TUNNEL ===                                         :: !RST!
+echo !MAG!  ::    [15] Start Cloudflare Tunnel         [api.fadproxy.my.id]         :: !RST!
+echo !MAG!  ::    [16] Stop Cloudflare Tunnel                                       :: !RST!
+echo !MAG!  ::    [17] Cek Status Tunnel                                            :: !RST!
+echo !MAG!  ::    [18] Install Tunnel as Service       [Auto-Start]                 :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !BLU!  ::    === UPDATE / INSTALL ===                                          :: !RST!
+echo !BLU!  ::    [19] Cek Versi Terbaru CLIProxyAPI                                :: !RST!
+echo !BLU!  ::    [20] Auto Update CLIProxyAPIPlus     [Windows]                    :: !RST!
+echo !BLU!  ::    [21] Auto Update CLIProxyAPI Std     [Windows]                    :: !RST!
+echo !BLU!  ::    [22] Install untuk OS Lain           [Linux/macOS]                :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [0]  Kembali ke Menu Utama                                        :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 set /p "ag_choice=      Pilih opsi [0-22]: "
@@ -747,9 +747,9 @@ goto cliproxyplus_manager
 :list_accounts
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                        DAFTAR SEMUA AKUN                           :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                         DAFTAR SEMUA AKUN                            :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Lokasi: !CLIPROXY_ACCOUNTS!\!RST!
 echo.
@@ -762,9 +762,9 @@ goto cliproxyplus_manager
 :login_github_copilot
 cls
 echo.
-echo !GRN!  ======================================================================== !RST!
-echo !GRN!  ::                      LOGIN GITHUB COPILOT                          :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !GRN!  ========================================================================== !RST!
+echo !GRN!  ::                       LOGIN GITHUB COPILOT                           :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Langkah login GitHub Copilot:!RST!
 echo !WHT!      1. Sebuah kode device akan ditampilkan!RST!
@@ -785,9 +785,9 @@ goto cliproxyplus_manager
 :login_kiro_google
 cls
 echo.
-echo !CYN!  ======================================================================== !RST!
-echo !CYN!  ::                   LOGIN KIRO - GOOGLE OAUTH                        :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !CYN!  ========================================================================== !RST!
+echo !CYN!  ::                    LOGIN KIRO - GOOGLE OAUTH                         :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Browser akan terbuka untuk login Google...!RST!
 echo !WHT!      Pilih akun Google yang terhubung dengan Kiro/AWS CodeWhisperer!RST!
@@ -803,9 +803,9 @@ goto cliproxyplus_manager
 :login_kiro_aws
 cls
 echo.
-echo !CYN!  ======================================================================== !RST!
-echo !CYN!  ::                  LOGIN KIRO - AWS BUILDER ID                       :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !CYN!  ========================================================================== !RST!
+echo !CYN!  ::                   LOGIN KIRO - AWS BUILDER ID                        :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Browser akan terbuka untuk login AWS Builder ID...!RST!
 echo !WHT!      Metode: Authorization Code Flow (Better UX)!RST!
@@ -821,9 +821,9 @@ goto cliproxyplus_manager
 :import_kiro_token
 cls
 echo.
-echo !CYN!  ======================================================================== !RST!
-echo !CYN!  ::                  IMPORT TOKEN KIRO DARI IDE                        :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !CYN!  ========================================================================== !RST!
+echo !CYN!  ::                   IMPORT TOKEN KIRO DARI IDE                         :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Metode ini akan mengimport token dari Kiro IDE yang sudah login.!RST!
 echo.
@@ -842,9 +842,9 @@ goto cliproxyplus_manager
 :add_antigravity
 cls
 echo.
-echo !YEL!  ======================================================================== !RST!
-echo !YEL!  ::                  LOGIN GOOGLE - ANTIGRAVITY                        :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !YEL!  ========================================================================== !RST!
+echo !YEL!  ::                   LOGIN GOOGLE - ANTIGRAVITY                         :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Browser akan terbuka untuk login Google...!RST!
 echo.
@@ -858,9 +858,9 @@ goto cliproxyplus_manager
 :add_codex
 cls
 echo.
-echo !YEL!  ======================================================================== !RST!
-echo !YEL!  ::                 TAMBAH AKUN CHATGPT - CODEX                        :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !YEL!  ========================================================================== !RST!
+echo !YEL!  ::                  TAMBAH AKUN CHATGPT - CODEX                         :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Browser akan terbuka untuk login ChatGPT/OpenAI...!RST!
 echo.
@@ -874,9 +874,9 @@ goto cliproxyplus_manager
 :add_claude
 cls
 echo.
-echo !YEL!  ======================================================================== !RST!
-echo !YEL!  ::                         LOGIN CLAUDE                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !YEL!  ========================================================================== !RST!
+echo !YEL!  ::                          LOGIN CLAUDE                                :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Browser akan terbuka untuk login Claude/Anthropic...!RST!
 echo.
@@ -890,9 +890,9 @@ goto cliproxyplus_manager
 :delete_account
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                           HAPUS AKUN                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                            HAPUS AKUN                                :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Akun yang tersedia:!RST!
 echo.
@@ -913,9 +913,9 @@ goto cliproxyplus_manager
 :start_server
 cls
 echo.
-echo !GRN!  ======================================================================== !RST!
-echo !GRN!  ::                  START CLIPROXYAPIPLUS SERVER                      :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !GRN!  ========================================================================== !RST!
+echo !GRN!  ::                   START CLIPROXYAPIPLUS SERVER                       :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Check if port 8317 is already in use
@@ -926,17 +926,17 @@ for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8317" ^| findstr "LISTENING
 
 if defined PORT_IN_USE (
     echo.
-    echo !RED!  ======================================================================== !RST!
-    echo !RED!  ::                   PORT 8317 SUDAH DIGUNAKAN                        :: !RST!
-    echo !WHT!  ======================================================================== !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !YEL!  ::      Port 8317 sedang digunakan oleh proses lain.                  :: !RST!
-    echo !YEL!  ::      PID: !PORT_IN_USE!                                                            :: !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !WHT!  ::      [1] Hentikan proses dan lanjutkan start server                :: !RST!
-    echo !WHT!  ::      [2] Kembali ke menu                                           :: !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !WHT!  ======================================================================== !RST!
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::                    PORT 8317 SUDAH DIGUNAKAN                         :: !RST!
+    echo !WHT!  ========================================================================== !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !YEL!  ::      Port 8317 sedang digunakan oleh proses lain.                    :: !RST!
+    echo !YEL!  ::      PID: !PORT_IN_USE!                                                              :: !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !WHT!  ::      [1] Hentikan proses dan lanjutkan start server                  :: !RST!
+    echo !WHT!  ::      [2] Kembali ke menu                                             :: !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !WHT!  ========================================================================== !RST!
     echo.
     set /p "port_choice=      Pilih [1-2]: "
     
@@ -946,11 +946,8 @@ if defined PORT_IN_USE (
         taskkill /F /PID !PORT_IN_USE! >nul 2>&1
         if !errorlevel! equ 0 (
             echo !GRN!      [OK] Proses berhasil dihentikan!!RST!
-            timeout /t 2 >nul
         ) else (
             echo !RED!      [X] Gagal menghentikan proses. Coba jalankan sebagai Administrator.!RST!
-            pause
-            goto cliproxyplus_manager
         )
     ) else (
         goto cliproxyplus_manager
@@ -970,9 +967,9 @@ goto cliproxyplus_manager
 :list_models
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                       MODEL YANG TERSEDIA                          :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                        MODEL YANG TERSEDIA                           :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Pastikan CLIProxyAPIPlus server sudah berjalan!!RST!
 echo.
@@ -986,9 +983,9 @@ goto cliproxyplus_manager
 :open_dashboard
 cls
 echo.
-echo !GRN!  ======================================================================== !RST!
-echo !GRN!  ::                 CLIPROXY DASHBOARD MANAGEMENT                      :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !GRN!  ========================================================================== !RST!
+echo !GRN!  ::                  CLIPROXY DASHBOARD MANAGEMENT                       :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Pastikan server CLIProxy sudah berjalan di port 8317!!RST!
 echo.
@@ -1015,9 +1012,9 @@ goto cliproxyplus_manager
 :stop_server
 cls
 echo.
-echo !RED!  ======================================================================== !RST!
-echo !RED!  ::                   HENTIKAN SERVER PORT 8317                        :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !RED!  ========================================================================== !RST!
+echo !RED!  ::                    HENTIKAN SERVER PORT 8317                         :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Check if port 8317 is in use
@@ -1057,16 +1054,16 @@ goto cliproxyplus_manager
 :start_standard_server
 cls
 echo.
-echo !CYN!  ======================================================================== !RST!
-echo !CYN!  ::           START CLIPROXYAPI STANDARD - v!CLIPROXY_STD_VER!                      :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !CYN!  ========================================================================== !RST!
+echo !CYN!  ::            START CLIPROXYAPI STANDARD - v!CLIPROXY_STD_VER!                       :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Check if Standard is installed
 if "!CLIPROXY_STANDARD_DIR!"=="" (
-    echo !RED!  ======================================================================== !RST!
-    echo !RED!  ::             CLIPROXYAPI STANDARD TIDAK TERINSTALL                    :: !RST!
-    echo !WHT!  ======================================================================== !RST!
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::              CLIPROXYAPI STANDARD TIDAK TERINSTALL                   :: !RST!
+    echo !WHT!  ========================================================================== !RST!
     echo.
     echo !YEL!      CLIProxyAPI Standard belum terinstall.!RST!
     echo !WHT!      Gunakan menu [21] Auto Update CLIProxyAPI Standard untuk install.!RST!
@@ -1076,9 +1073,9 @@ if "!CLIPROXY_STANDARD_DIR!"=="" (
 )
 
 if not exist "!CLIPROXY_STANDARD_DIR!\cli-proxy-api.exe" (
-    echo !RED!  ======================================================================== !RST!
-    echo !RED!  ::             CLI-PROXY-API.EXE TIDAK DITEMUKAN                        :: !RST!
-    echo !WHT!  ======================================================================== !RST!
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::              CLI-PROXY-API.EXE TIDAK DITEMUKAN                       :: !RST!
+    echo !WHT!  ========================================================================== !RST!
     echo.
     echo !YEL!      File cli-proxy-api.exe tidak ditemukan di:!RST!
     echo !WHT!      !CLIPROXY_STANDARD_DIR!!RST!
@@ -1097,18 +1094,18 @@ for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8317" ^| findstr "LISTENING
 
 if defined PORT_STD_IN_USE (
     echo.
-    echo !RED!  ======================================================================== !RST!
-    echo !RED!  ::                   PORT 8317 SUDAH DIGUNAKAN                        :: !RST!
-    echo !WHT!  ======================================================================== !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !YEL!  ::      Port 8317 sedang digunakan oleh proses lain.                  :: !RST!
-    echo !YEL!  ::      Kemungkinan CLIProxyAPIPlus sedang berjalan.                  :: !RST!
-    echo !YEL!  ::      PID: !PORT_STD_IN_USE!                                                            :: !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !WHT!  ::      [1] Hentikan proses dan lanjutkan start Standard server       :: !RST!
-    echo !WHT!  ::      [2] Kembali ke menu                                           :: !RST!
-    echo !WHT!  ::                                                                    :: !RST!
-    echo !WHT!  ======================================================================== !RST!
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::                    PORT 8317 SUDAH DIGUNAKAN                         :: !RST!
+    echo !WHT!  ========================================================================== !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !YEL!  ::      Port 8317 sedang digunakan oleh proses lain.                    :: !RST!
+    echo !YEL!  ::      Kemungkinan CLIProxyAPIPlus sedang berjalan.                    :: !RST!
+    echo !YEL!  ::      PID: !PORT_STD_IN_USE!                                                              :: !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !WHT!  ::      [1] Hentikan proses dan lanjutkan start Standard server         :: !RST!
+    echo !WHT!  ::      [2] Kembali ke menu                                             :: !RST!
+    echo !WHT!  ::                                                                      :: !RST!
+    echo !WHT!  ========================================================================== !RST!
     echo.
     set /p "port_std_choice=      Pilih [1-2]: "
     
@@ -1118,11 +1115,8 @@ if defined PORT_STD_IN_USE (
         taskkill /F /PID !PORT_STD_IN_USE! >nul 2>&1
         if !errorlevel! equ 0 (
             echo !GRN!      [OK] Proses berhasil dihentikan!!RST!
-            timeout /t 2 >nul
         ) else (
             echo !RED!      [X] Gagal menghentikan proses. Coba jalankan sebagai Administrator.!RST!
-            pause
-            goto cliproxyplus_manager
         )
     ) else (
         goto cliproxyplus_manager
@@ -1149,18 +1143,18 @@ REM ============================================================================
 :start_tunnel
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::              START CLOUDFLARE TUNNEL                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                   START CLOUDFLARE TUNNEL                            :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Domain: !TUNNEL_DOMAIN!!RST!
 echo.
 
 REM Check if cloudflared is installed
 if "!CLOUDFLARED_EXE!"=="" (
-    echo !RED!  ======================================================================== !RST!
-    echo !RED!  ::                 CLOUDFLARED TIDAK DITEMUKAN                        :: !RST!
-    echo !WHT!  ======================================================================== !RST!
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::                  CLOUDFLARED TIDAK DITEMUKAN                         :: !RST!
+    echo !WHT!  ========================================================================== !RST!
     echo.
     echo !YEL!      Cloudflared tidak terinstall di lokasi standar:!RST!
     echo !WHT!        - C:\Program Files (x86)\cloudflared\cloudflared.exe!RST!
@@ -1212,9 +1206,9 @@ goto cliproxyplus_manager
 :stop_tunnel
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::              STOP CLOUDFLARE TUNNEL                                :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                   STOP CLOUDFLARE TUNNEL                             :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !YEL!      Mencari proses cloudflared...!RST!
 echo.
@@ -1238,9 +1232,9 @@ goto cliproxyplus_manager
 :tunnel_status
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::              STATUS CLOUDFLARE TUNNEL                              :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::                   STATUS CLOUDFLARE TUNNEL                           :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Check cloudflared process
@@ -1299,9 +1293,9 @@ goto cliproxyplus_manager
 :install_tunnel_service
 cls
 echo.
-echo !MAG!  ======================================================================== !RST!
-echo !MAG!  ::        INSTALL TUNNEL AS WINDOWS SERVICE                           :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !MAG!  ========================================================================== !RST!
+echo !MAG!  ::             INSTALL TUNNEL AS WINDOWS SERVICE                        :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Check if cloudflared is installed
@@ -1362,9 +1356,9 @@ REM ============================================================================
 :cliproxy_check_version
 cls
 echo.
-echo !BLU!  ======================================================================== !RST!
-echo !BLU!  ::                    CEK VERSI TERBARU                               :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !BLU!  ========================================================================== !RST!
+echo !BLU!  ::                     CEK VERSI TERBARU                                :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !YEL!      Mengecek versi terbaru dari GitHub...!RST!
 echo.
@@ -1383,6 +1377,7 @@ if "!CURRENT_PLUS_VER!"=="N/A" (
 )
 if "!CURRENT_STD_VER!"=="N/A" (
     if exist "!CLIPROXY_STANDARD_DIR!\cli-proxy-api.exe" (
+        set "CLIPROXY_STANDARD_DIR=!CLIPROXY_STANDARD_BASE!"
         for /f "tokens=3 delims=, " %%v in ('"!CLIPROXY_STANDARD_DIR!\cli-proxy-api.exe" --version 2^>nul') do (
             if "!CURRENT_STD_VER!"=="N/A" set "CURRENT_STD_VER=%%v"
         )
@@ -1428,9 +1423,9 @@ REM Extract base version from LATEST_STD (e.g., 6.7.7-1 -> 6.7.7)
 for /f "tokens=1 delims=-" %%a in ("!LATEST_STD_CLEAN!") do set "LATEST_STD_BASE=%%a"
 
 echo.
-echo !WHT!  ======================================================================== !RST!
-echo !WHT!  ::                        HASIL PENGECEKAN                            :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !WHT!  ========================================================================== !RST!
+echo !WHT!  ::                         HASIL PENGECEKAN                             :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !CYN!      CLIProxyAPIPlus:!RST!
 if "!CURRENT_PLUS_VER!"=="N/A" (
@@ -1477,9 +1472,9 @@ goto cliproxyplus_manager
 :cliproxy_update_plus
 cls
 echo.
-echo !BLU!  ======================================================================== !RST!
-echo !BLU!  ::               AUTO UPDATE CLIProxyAPIPlus (Windows)                :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !BLU!  ========================================================================== !RST!
+echo !BLU!  ::                AUTO UPDATE CLIProxyAPIPlus (Windows)                 :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Fetch latest release info
@@ -1670,9 +1665,9 @@ goto cliproxyplus_manager
 :cliproxy_update_standard
 cls
 echo.
-echo !BLU!  ======================================================================== !RST!
-echo !BLU!  ::              AUTO UPDATE CLIProxyAPI Standard (Windows)            :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !BLU!  ========================================================================== !RST!
+echo !BLU!  ::               AUTO UPDATE CLIProxyAPI Standard (Windows)             :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 
 REM Fetch latest release info
@@ -1884,9 +1879,9 @@ goto cliproxyplus_manager
 :cliproxy_install_other_os
 cls
 echo.
-echo !BLU!  ======================================================================== !RST!
-echo !BLU!  ::                INSTALL UNTUK OS LAIN (Linux/macOS)                 :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !BLU!  ========================================================================== !RST!
+echo !BLU!  ::                 INSTALL UNTUK OS LAIN (Linux/macOS)                  :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      Pilih versi yang ingin diinstall:!RST!
 echo.
@@ -1911,9 +1906,9 @@ if "!REPO_NAME!"=="" goto cliproxy_install_other_os
 
 cls
 echo.
-echo !BLU!  ======================================================================== !RST!
-echo !BLU!  ::                    PILIH SISTEM OPERASI                            :: !RST!
-echo !WHT!  ======================================================================== !RST!
+echo !BLU!  ========================================================================== !RST!
+echo !BLU!  ::                     PILIH SISTEM OPERASI                             :: !RST!
+echo !WHT!  ========================================================================== !RST!
 echo.
 echo !WHT!      [1]  Linux x86_64 (AMD/Intel 64-bit)!RST!
 echo !WHT!      [2]  Linux ARM64 (Raspberry Pi 4, etc)!RST!
