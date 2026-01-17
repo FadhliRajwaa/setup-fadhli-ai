@@ -1490,10 +1490,11 @@ REM Get version and download URL using $env:TEMP
 set "LATEST_VER="
 set "DOWNLOAD_URL="
 for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; $j.tag_name } catch { Write-Output '' }" 2^>nul') do set "LATEST_VER=%%a"
-for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; ($j.assets | Where-Object { $_.name -like '*Windows_x86_64.zip' }).browser_download_url } catch { Write-Output '' }" 2^>nul') do set "DOWNLOAD_URL=%%a"
+for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; ($j.assets | Where-Object { $_.name -like '*windows_amd64.zip' }).browser_download_url } catch { Write-Output '' }" 2^>nul') do set "DOWNLOAD_URL=%%a"
 
 if "!LATEST_VER!"=="" (
     echo !RED!      [X] Gagal mendapatkan info release dari GitHub!!RST!
+    echo !YEL!      Kemungkinan: Rate limit GitHub API atau tidak ada koneksi internet.!RST!
     echo.
     pause
     goto cliproxyplus_manager
@@ -1501,6 +1502,7 @@ if "!LATEST_VER!"=="" (
 
 if "!DOWNLOAD_URL!"=="" (
     echo !RED!      [X] Gagal mendapatkan download URL!!RST!
+    echo !YEL!      Kemungkinan: Tidak ada asset Windows untuk versi ini.!RST!
     echo.
     pause
     goto cliproxyplus_manager
@@ -1519,29 +1521,62 @@ echo.
 echo !YEL!      Menghentikan server jika sedang berjalan...!RST!
 taskkill /f /im cli-proxy-api-plus.exe >nul 2>&1
 
-REM Download using %TEMP% directly
-set "DL_FILE=%TEMP%\cli-proxy-api-plus.zip"
+REM Download file
 echo !YEL!      Mendownload !LATEST_VER!...!RST!
-curl -L -o "%TEMP%\cli-proxy-api-plus.zip" "!DOWNLOAD_URL!" 2>nul
+echo !WHT!      Target: %TEMP%\cli-proxy-api-plus.zip!RST!
+curl -L --progress-bar -o "%TEMP%\cli-proxy-api-plus.zip" "!DOWNLOAD_URL!"
+REM Check if download was successful (file exists and size > 0)
 if not exist "%TEMP%\cli-proxy-api-plus.zip" (
     echo !RED!      [X] Gagal download file!!RST!
+    echo !YEL!      File tidak ditemukan di: %TEMP%\cli-proxy-api-plus.zip!RST!
     pause
     goto cliproxyplus_manager
 )
 
+REM Check file size
+for %%A in ("%TEMP%\cli-proxy-api-plus.zip") do set "FILESIZE=%%~zA"
+if "!FILESIZE!"=="" set "FILESIZE=0"
+if !FILESIZE! LSS 1000000 (
+    echo !RED!      [X] Download tidak lengkap atau file corrupt!!RST!
+    echo !YEL!      Ukuran file: !FILESIZE! bytes ^(seharusnya ~11MB^)!RST!
+    del "%TEMP%\cli-proxy-api-plus.zip" >nul 2>&1
+    pause
+    goto cliproxyplus_manager
+)
+echo !GRN!      [OK] Download selesai ^(!FILESIZE! bytes^)!RST!
+
 REM Extract
 echo !YEL!      Mengekstrak file...!RST!
 if exist "%TEMP%\cli-proxy-api-plus-extract" rd /s /q "%TEMP%\cli-proxy-api-plus-extract"
-powershell -NoProfile -Command "Expand-Archive -Path $env:TEMP\cli-proxy-api-plus.zip -DestinationPath $env:TEMP\cli-proxy-api-plus-extract -Force"
+mkdir "%TEMP%\cli-proxy-api-plus-extract"
+powershell -NoProfile -Command "Expand-Archive -Path '%TEMP%\cli-proxy-api-plus.zip' -DestinationPath '%TEMP%\cli-proxy-api-plus-extract' -Force"
 
-REM Find source folder (archive may have subfolder)
+REM Find source folder (archive may have subfolder like CLIProxyAPIPlus_6.7.6-1_windows_amd64)
 set "SOURCE_DIR="
-for /d %%d in ("%TEMP%\cli-proxy-api-plus-extract\*") do set "SOURCE_DIR=%%d"
-if "!SOURCE_DIR!"=="" set "SOURCE_DIR=%TEMP%\cli-proxy-api-plus-extract"
+for /d %%d in ("%TEMP%\cli-proxy-api-plus-extract\*") do (
+    if exist "%%d\cli-proxy-api-plus.exe" set "SOURCE_DIR=%%d"
+)
+REM If exe not in subfolder, check root
+if "!SOURCE_DIR!"=="" (
+    if exist "%TEMP%\cli-proxy-api-plus-extract\cli-proxy-api-plus.exe" (
+        set "SOURCE_DIR=%TEMP%\cli-proxy-api-plus-extract"
+    )
+)
+
+REM Debug: show what we found
+echo !WHT!      Source directory: !SOURCE_DIR!!RST!
 
 REM Verify exe exists in source
-if not exist "!SOURCE_DIR!\cli-proxy-api-plus.exe" (
+if "!SOURCE_DIR!"=="" (
     echo !RED!      [X] File cli-proxy-api-plus.exe tidak ditemukan dalam archive!!RST!
+    echo !YEL!      Isi archive:!RST!
+    dir /s /b "%TEMP%\cli-proxy-api-plus-extract" 2>nul | findstr /i ".exe"
+    pause
+    goto cliproxyplus_manager
+)
+
+if not exist "!SOURCE_DIR!\cli-proxy-api-plus.exe" (
+    echo !RED!      [X] File cli-proxy-api-plus.exe tidak ditemukan!!RST!
     pause
     goto cliproxyplus_manager
 )
@@ -1585,7 +1620,7 @@ if defined CONFIG_BACKED_UP (
             echo   secret-key: ""
             echo   disable-control-panel: false
             echo   panel-github-repository: https://github.com/router-for-me/Cli-Proxy-API-Management-Center
-            echo auth-dir: "C:\\Users\\%USERNAME%\\.cli-proxy-api"
+            echo auth-dir: "!USERPROFILE:\=\\!\.cli-proxy-api"
             echo api-keys:
             echo   - "sk-dummy"
             echo debug: false
@@ -1648,10 +1683,11 @@ REM Get version and download URL using $env:TEMP
 set "LATEST_VER="
 set "DOWNLOAD_URL="
 for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; $j.tag_name } catch { Write-Output '' }" 2^>nul') do set "LATEST_VER=%%a"
-for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; ($j.assets | Where-Object { $_.name -like '*Windows_x86_64.zip' }).browser_download_url } catch { Write-Output '' }" 2^>nul') do set "DOWNLOAD_URL=%%a"
+for /f "tokens=*" %%a in ('powershell -NoProfile -Command "try { $j=Get-Content -Path $env:TEMP\cliproxy_release.json -Raw -ErrorAction Stop | ConvertFrom-Json; ($j.assets | Where-Object { $_.name -like '*windows_amd64.zip' }).browser_download_url } catch { Write-Output '' }" 2^>nul') do set "DOWNLOAD_URL=%%a"
 
 if "!LATEST_VER!"=="" (
     echo !RED!      [X] Gagal mendapatkan info release dari GitHub!!RST!
+    echo !YEL!      Kemungkinan: Rate limit GitHub API atau tidak ada koneksi internet.!RST!
     echo.
     pause
     goto cliproxyplus_manager
@@ -1659,6 +1695,7 @@ if "!LATEST_VER!"=="" (
 
 if "!DOWNLOAD_URL!"=="" (
     echo !RED!      [X] Gagal mendapatkan download URL!!RST!
+    echo !YEL!      Kemungkinan: Tidak ada asset Windows untuk versi ini.!RST!
     echo.
     pause
     goto cliproxyplus_manager
@@ -1677,28 +1714,63 @@ echo.
 echo !YEL!      Menghentikan server jika sedang berjalan...!RST!
 taskkill /f /im cli-proxy-api.exe >nul 2>&1
 
-REM Download using %TEMP% directly
+REM Download file
 echo !YEL!      Mendownload !LATEST_VER!...!RST!
-curl -L -o "%TEMP%\cli-proxy-api.zip" "!DOWNLOAD_URL!" 2>nul
+echo !WHT!      Target: %TEMP%\cli-proxy-api.zip!RST!
+curl -L --progress-bar -o "%TEMP%\cli-proxy-api.zip" "!DOWNLOAD_URL!"
+
+REM Check if download was successful (file exists and size > 0)
 if not exist "%TEMP%\cli-proxy-api.zip" (
     echo !RED!      [X] Gagal download file!!RST!
+    echo !YEL!      File tidak ditemukan di: %TEMP%\cli-proxy-api.zip!RST!
     pause
     goto cliproxyplus_manager
 )
 
+REM Check file size
+for %%A in ("%TEMP%\cli-proxy-api.zip") do set "FILESIZE=%%~zA"
+if "!FILESIZE!"=="" set "FILESIZE=0"
+if !FILESIZE! LSS 1000000 (
+    echo !RED!      [X] Download tidak lengkap atau file corrupt!!RST!
+    echo !YEL!      Ukuran file: !FILESIZE! bytes ^(seharusnya ~11MB^)!RST!
+    del "%TEMP%\cli-proxy-api.zip" >nul 2>&1
+    pause
+    goto cliproxyplus_manager
+)
+echo !GRN!      [OK] Download selesai ^(!FILESIZE! bytes^)!RST!
+
 REM Extract
 echo !YEL!      Mengekstrak file...!RST!
 if exist "%TEMP%\cli-proxy-api-extract" rd /s /q "%TEMP%\cli-proxy-api-extract"
-powershell -NoProfile -Command "Expand-Archive -Path $env:TEMP\cli-proxy-api.zip -DestinationPath $env:TEMP\cli-proxy-api-extract -Force"
+mkdir "%TEMP%\cli-proxy-api-extract"
+powershell -NoProfile -Command "Expand-Archive -Path '%TEMP%\cli-proxy-api.zip' -DestinationPath '%TEMP%\cli-proxy-api-extract' -Force"
 
-REM Find source folder (archive may have subfolder)
+REM Find source folder (archive may have subfolder like CLIProxyAPI_6.7.7_windows_amd64)
 set "SOURCE_DIR="
-for /d %%d in ("%TEMP%\cli-proxy-api-extract\*") do set "SOURCE_DIR=%%d"
-if "!SOURCE_DIR!"=="" set "SOURCE_DIR=%TEMP%\cli-proxy-api-extract"
+for /d %%d in ("%TEMP%\cli-proxy-api-extract\*") do (
+    if exist "%%d\cli-proxy-api.exe" set "SOURCE_DIR=%%d"
+)
+REM If exe not in subfolder, check root
+if "!SOURCE_DIR!"=="" (
+    if exist "%TEMP%\cli-proxy-api-extract\cli-proxy-api.exe" (
+        set "SOURCE_DIR=%TEMP%\cli-proxy-api-extract"
+    )
+)
+
+REM Debug: show what we found
+echo !WHT!      Source directory: !SOURCE_DIR!!RST!
 
 REM Verify exe exists in source
-if not exist "!SOURCE_DIR!\cli-proxy-api.exe" (
+if "!SOURCE_DIR!"=="" (
     echo !RED!      [X] File cli-proxy-api.exe tidak ditemukan dalam archive!!RST!
+    echo !YEL!      Isi archive:!RST!
+    dir /s /b "%TEMP%\cli-proxy-api-extract" 2>nul | findstr /i ".exe"
+    pause
+    goto cliproxyplus_manager
+)
+
+if not exist "!SOURCE_DIR!\cli-proxy-api.exe" (
+    echo !RED!      [X] File cli-proxy-api.exe tidak ditemukan!!RST!
     pause
     goto cliproxyplus_manager
 )
@@ -1765,7 +1837,7 @@ if defined STD_CONFIG_BACKED_UP (
             echo   secret-key: ""
             echo   disable-control-panel: false
             echo   panel-github-repository: https://github.com/router-for-me/Cli-Proxy-API-Management-Center
-            echo auth-dir: "C:\\Users\\%USERNAME%\\.cli-proxy-api"
+            echo auth-dir: "!USERPROFILE:\=\\!\.cli-proxy-api"
             echo api-keys:
             echo   - "sk-dummy"
             echo debug: false
