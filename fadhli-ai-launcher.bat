@@ -1375,12 +1375,15 @@ echo !WHT!  ====================================================================
 echo.
 
 REM Show current cloudflared status
-if "!CLOUDFLARED_EXE!"=="" (
-    echo !RED!      [X] Cloudflared: TIDAK TERINSTALL!RST!
-) else (
-    echo !GRN!      [OK] Cloudflared: !CLOUDFLARED_EXE!!RST!
-    for /f "tokens=*" %%v in ('"!CLOUDFLARED_EXE!" --version 2^>nul') do echo !CYN!          %%v!RST!
-)
+if "!CLOUDFLARED_EXE!"=="" goto show_cf_not_installed
+echo !GRN!      [OK] Cloudflared: !CLOUDFLARED_EXE!!RST!
+for /f "tokens=*" %%v in ('call "!CLOUDFLARED_EXE!" --version 2^>nul') do echo !CYN!          %%v!RST!
+goto show_cf_menu
+
+:show_cf_not_installed
+echo !RED!      [X] Cloudflared: TIDAK TERINSTALL!RST!
+
+:show_cf_menu
 echo.
 echo !WHT!  ========================================================================== !RST!
 echo !WHT!  ::    === INSTALL CLOUDFLARED ===                                       :: !RST!
@@ -1406,73 +1409,61 @@ set /p "cf_choice=      Pilih [0-10]: "
 
 if "!cf_choice!"=="" goto install_cloudflared
 if "!cf_choice!"=="0" goto cliproxyplus_manager
-
-REM Option 1: Install via Winget
-if "!cf_choice!"=="1" (
-    echo.
-    echo !CYN!      Menginstall Cloudflared via Winget...!RST!
-    echo.
-    winget install Cloudflare.cloudflared
-    echo.
-    echo !YEL!      [!] Restart launcher untuk mendeteksi cloudflared yang baru diinstall!RST!
-    echo.
-    pause
-    goto install_cloudflared
-)
-
-REM Option 2: Download Manual
-if "!cf_choice!"=="2" (
-    echo.
-    echo !CYN!      Membuka halaman download Cloudflared...!RST!
-    start "" "https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/"
-    echo.
-    echo !WHT!      Download cloudflared-windows-amd64.exe!RST!
-    echo !WHT!      Rename ke cloudflared.exe!RST!
-    echo !WHT!      Taruh di C:\Program Files (x86)\cloudflared\!RST!
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="1" goto cf_install_winget
+if "!cf_choice!"=="2" goto cf_download_manual
 
 REM Check cloudflared for options 3-10
-if "!CLOUDFLARED_EXE!"=="" (
-    if "!cf_choice!"=="3" goto cf_need_install
-    if "!cf_choice!"=="4" goto cf_need_install
-    if "!cf_choice!"=="5" goto cf_need_install
-    if "!cf_choice!"=="6" goto cf_need_install
-    if "!cf_choice!"=="7" goto cf_need_install
-    if "!cf_choice!"=="8" goto cf_need_install
-    if "!cf_choice!"=="9" goto cf_need_install
-    if "!cf_choice!"=="10" goto cf_need_install
-)
+if "!CLOUDFLARED_EXE!"=="" goto cf_check_need_install
+goto cf_route_options
 
-REM Option 3: Login Cloudflare
+:cf_check_need_install
+if "!cf_choice!"=="3" goto cf_need_install
+if "!cf_choice!"=="4" goto cf_need_install
+if "!cf_choice!"=="5" goto cf_need_install
+if "!cf_choice!"=="6" goto cf_need_install
+if "!cf_choice!"=="7" goto cf_need_install
+if "!cf_choice!"=="8" goto cf_need_install
+if "!cf_choice!"=="9" goto cf_need_install
+if "!cf_choice!"=="10" goto cf_need_install
+goto cf_invalid_choice
+
+:cf_route_options
 if "!cf_choice!"=="3" goto cf_login
-
-REM Option 4: Create Tunnel
 if "!cf_choice!"=="4" goto cf_create_tunnel
-
-REM Option 5: List Tunnels
 if "!cf_choice!"=="5" goto cf_list_tunnels
-
-REM Option 6: Setup Config
 if "!cf_choice!"=="6" goto cf_setup_config
-
-REM Option 7: Install Service
 if "!cf_choice!"=="7" goto cf_install_service
-
-REM Option 8: Uninstall Service
 if "!cf_choice!"=="8" goto cf_uninstall_service
-
-REM Option 9: Start Service
 if "!cf_choice!"=="9" goto cf_start_service
-
-REM Option 10: Stop Service
 if "!cf_choice!"=="10" goto cf_stop_service
 
+:cf_invalid_choice
 echo.
 echo !RED!      [X] Pilihan tidak valid!!RST!
 timeout /t 2 >nul
+goto install_cloudflared
+
+:cf_install_winget
+echo.
+echo !CYN!      Menginstall Cloudflared via Winget...!RST!
+echo.
+winget install Cloudflare.cloudflared
+echo.
+echo !YEL!      [!] Restart launcher untuk mendeteksi cloudflared yang baru diinstall!RST!
+echo.
+pause
+goto install_cloudflared
+
+:cf_download_manual
+echo.
+echo !CYN!      Membuka halaman download Cloudflared...!RST!
+start "" "https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/"
+echo.
+echo !WHT!      Download cloudflared-windows-amd64.exe!RST!
+echo !WHT!      Rename ke cloudflared.exe!RST!
+echo !WHT!      Taruh di C:\Program Files (x86)\cloudflared\!RST!
+echo.
+pause
 goto install_cloudflared
 
 :cf_need_install
@@ -1522,19 +1513,22 @@ echo.
 echo !WHT!      Config file lokasi: %USERPROFILE%\.cloudflared\config.yml!RST!
 echo.
 
-if exist "%USERPROFILE%\.cloudflared\config.yml" (
-    echo !GRN!      [OK] Config file sudah ada!!RST!
-    echo.
-    echo !WHT!      Isi config.yml:!RST!
-    echo !WHT!      ----------------------------------------!RST!
-    type "%USERPROFILE%\.cloudflared\config.yml"
-    echo.
-    echo !WHT!      ----------------------------------------!RST!
-    echo.
-    pause
-    goto install_cloudflared
-)
+if exist "%USERPROFILE%\.cloudflared\config.yml" goto cf_config_exists
+goto cf_config_create
 
+:cf_config_exists
+echo !GRN!      [OK] Config file sudah ada!!RST!
+echo.
+echo !WHT!      Isi config.yml:!RST!
+echo !WHT!      ----------------------------------------!RST!
+type "%USERPROFILE%\.cloudflared\config.yml"
+echo.
+echo !WHT!      ----------------------------------------!RST!
+echo.
+pause
+goto install_cloudflared
+
+:cf_config_create
 echo !YEL!      [!] Config file belum ada. Membuat template...!RST!
 echo.
 
@@ -1543,14 +1537,17 @@ echo !WHT!      Mencari Tunnel ID untuk: !TUNNEL_NAME!!RST!
 set "TUNNEL_ID="
 for /f "tokens=1" %%t in ('call "!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
 
-if "!TUNNEL_ID!"=="" (
-    echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
-    echo !YEL!      Buat tunnel dulu dengan opsi [4]!RST!
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!TUNNEL_ID!"=="" goto cf_tunnel_not_found
+goto cf_create_config_file
 
+:cf_tunnel_not_found
+echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
+echo !YEL!      Buat tunnel dulu dengan opsi [4]!RST!
+echo.
+pause
+goto install_cloudflared
+
+:cf_create_config_file
 echo !GRN!      Tunnel ID: !TUNNEL_ID!!RST!
 echo.
 
