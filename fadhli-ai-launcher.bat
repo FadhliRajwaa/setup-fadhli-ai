@@ -1171,9 +1171,9 @@ if "!CLOUDFLARED_EXE!"=="" (
     goto cliproxyplus_manager
 )
 
-REM Check if tunnel exists
+REM Check if tunnel exists - use call to handle spaces in path
 set "TUNNEL_EXISTS="
-for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_EXISTS=%%t"
+for /f "tokens=1" %%t in ('call "!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_EXISTS=%%t"
 
 if "!TUNNEL_EXISTS!"=="" (
     echo !RED!  ========================================================================== !RST!
@@ -1205,6 +1205,10 @@ if "!TUNNEL_EXISTS!"=="" (
     if "!tun_create_choice!"=="2" goto install_cloudflared
     goto cliproxyplus_manager
 )
+
+REM Tunnel exists - show info
+echo !GRN!      [OK] Tunnel "!TUNNEL_NAME!" ditemukan (ID: !TUNNEL_EXISTS!)!RST!
+echo.
 
 REM Check if config.yml exists
 if not exist "%USERPROFILE%\.cloudflared\config.yml" (
@@ -1529,7 +1533,7 @@ echo.
 REM Get tunnel ID
 echo !WHT!      Mencari Tunnel ID untuk: !TUNNEL_NAME!!RST!
 set "TUNNEL_ID="
-for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
+for /f "tokens=1" %%t in ('call "!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
 
 if "!TUNNEL_ID!"=="" (
     echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
