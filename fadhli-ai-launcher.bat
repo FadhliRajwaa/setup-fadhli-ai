@@ -1424,157 +1424,181 @@ if "!cf_choice!"=="2" (
 
 REM Check cloudflared for options 3-10
 if "!CLOUDFLARED_EXE!"=="" (
-    echo.
-    echo !RED!      [X] Cloudflared belum terinstall!!RST!
-    echo !YEL!      Pilih opsi [1] atau [2] untuk install dulu.!RST!
-    echo.
-    pause
-    goto install_cloudflared
+    if "!cf_choice!"=="3" goto cf_need_install
+    if "!cf_choice!"=="4" goto cf_need_install
+    if "!cf_choice!"=="5" goto cf_need_install
+    if "!cf_choice!"=="6" goto cf_need_install
+    if "!cf_choice!"=="7" goto cf_need_install
+    if "!cf_choice!"=="8" goto cf_need_install
+    if "!cf_choice!"=="9" goto cf_need_install
+    if "!cf_choice!"=="10" goto cf_need_install
 )
 
 REM Option 3: Login Cloudflare
-if "!cf_choice!"=="3" (
-    echo.
-    echo !CYN!      Membuka browser untuk login ke Cloudflare...!RST!
-    echo !WHT!      Ikuti instruksi di browser untuk authorize.!RST!
-    echo.
-    "!CLOUDFLARED_EXE!" tunnel login
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="3" goto cf_login
 
 REM Option 4: Create Tunnel
-if "!cf_choice!"=="4" (
-    echo.
-    echo !CYN!      Buat Tunnel Baru!RST!
-    echo.
-    set /p "new_tunnel_name=      Nama tunnel (default: !TUNNEL_NAME!): "
-    if "!new_tunnel_name!"=="" set "new_tunnel_name=!TUNNEL_NAME!"
-    echo.
-    echo !WHT!      Membuat tunnel: !new_tunnel_name!!RST!
-    "!CLOUDFLARED_EXE!" tunnel create !new_tunnel_name!
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="4" goto cf_create_tunnel
 
 REM Option 5: List Tunnels
-if "!cf_choice!"=="5" (
-    echo.
-    echo !CYN!      Daftar Tunnel yang Ada:!RST!
-    echo.
-    "!CLOUDFLARED_EXE!" tunnel list
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="5" goto cf_list_tunnels
 
 REM Option 6: Setup Config
-if "!cf_choice!"=="6" (
-    echo.
-    echo !CYN!      Setup Config Tunnel!RST!
-    echo.
-    echo !WHT!      Config file lokasi: %USERPROFILE%\.cloudflared\config.yml!RST!
-    echo.
-    
-    if exist "%USERPROFILE%\.cloudflared\config.yml" (
-        echo !GRN!      [OK] Config file sudah ada!!RST!
-        echo.
-        echo !WHT!      Isi config.yml:!RST!
-        echo !WHT!      ----------------------------------------!RST!
-        type "%USERPROFILE%\.cloudflared\config.yml"
-        echo.
-        echo !WHT!      ----------------------------------------!RST!
-    ) else (
-        echo !YEL!      [!] Config file belum ada. Membuat template...!RST!
-        echo.
-        
-        REM Get tunnel ID
-        echo !WHT!      Mencari Tunnel ID untuk: !TUNNEL_NAME!!RST!
-        set "TUNNEL_ID="
-        for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
-        
-        if "!TUNNEL_ID!"=="" (
-            echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
-            echo !YEL!      Buat tunnel dulu dengan opsi [4]!RST!
-        ) else (
-            echo !GRN!      Tunnel ID: !TUNNEL_ID!!RST!
-            echo.
-            
-            REM Create config directory if not exists
-            if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
-            
-            REM Create config.yml
-            (
-                echo tunnel: !TUNNEL_ID!
-                echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_ID!.json
-                echo.
-                echo ingress:
-                echo   - hostname: !TUNNEL_DOMAIN!
-                echo     service: http://localhost:8317
-                echo   - service: http_status:404
-            ) > "%USERPROFILE%\.cloudflared\config.yml"
-            
-            echo !GRN!      [OK] Config file berhasil dibuat!!RST!
-            echo.
-            echo !WHT!      Isi config.yml:!RST!
-            echo !WHT!      ----------------------------------------!RST!
-            type "%USERPROFILE%\.cloudflared\config.yml"
-            echo.
-            echo !WHT!      ----------------------------------------!RST!
-        )
-    )
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="6" goto cf_setup_config
 
 REM Option 7: Install Service
-if "!cf_choice!"=="7" (
-    echo.
-    echo !YEL!      [!] Install service membutuhkan Administrator!!RST!
-    echo !WHT!      Jika gagal, jalankan launcher sebagai Admin.!RST!
-    echo.
-    "!CLOUDFLARED_EXE!" service install
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="7" goto cf_install_service
 
 REM Option 8: Uninstall Service
-if "!cf_choice!"=="8" (
-    echo.
-    echo !YEL!      Menghapus service...!RST!
-    "!CLOUDFLARED_EXE!" service uninstall
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="8" goto cf_uninstall_service
 
 REM Option 9: Start Service
-if "!cf_choice!"=="9" (
-    echo.
-    echo !CYN!      Memulai service cloudflared...!RST!
-    net start cloudflared
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="9" goto cf_start_service
 
 REM Option 10: Stop Service
-if "!cf_choice!"=="10" (
-    echo.
-    echo !YEL!      Menghentikan service cloudflared...!RST!
-    net stop cloudflared
-    echo.
-    pause
-    goto install_cloudflared
-)
+if "!cf_choice!"=="10" goto cf_stop_service
 
 echo.
 echo !RED!      [X] Pilihan tidak valid!!RST!
 timeout /t 2 >nul
+goto install_cloudflared
+
+:cf_need_install
+echo.
+echo !RED!      [X] Cloudflared belum terinstall!!RST!
+echo !YEL!      Pilih opsi [1] atau [2] untuk install dulu.!RST!
+echo.
+pause
+goto install_cloudflared
+
+:cf_login
+echo.
+echo !CYN!      Membuka browser untuk login ke Cloudflare...!RST!
+echo !WHT!      Ikuti instruksi di browser untuk authorize.!RST!
+echo.
+"!CLOUDFLARED_EXE!" tunnel login
+echo.
+pause
+goto install_cloudflared
+
+:cf_create_tunnel
+echo.
+echo !CYN!      Buat Tunnel Baru!RST!
+echo.
+set /p "new_tunnel_name=      Nama tunnel (default: !TUNNEL_NAME!): "
+if "!new_tunnel_name!"=="" set "new_tunnel_name=!TUNNEL_NAME!"
+echo.
+echo !WHT!      Membuat tunnel: !new_tunnel_name!!RST!
+"!CLOUDFLARED_EXE!" tunnel create !new_tunnel_name!
+echo.
+pause
+goto install_cloudflared
+
+:cf_list_tunnels
+echo.
+echo !CYN!      Daftar Tunnel yang Ada:!RST!
+echo.
+"!CLOUDFLARED_EXE!" tunnel list
+echo.
+pause
+goto install_cloudflared
+
+:cf_setup_config
+echo.
+echo !CYN!      Setup Config Tunnel!RST!
+echo.
+echo !WHT!      Config file lokasi: %USERPROFILE%\.cloudflared\config.yml!RST!
+echo.
+
+if exist "%USERPROFILE%\.cloudflared\config.yml" (
+    echo !GRN!      [OK] Config file sudah ada!!RST!
+    echo.
+    echo !WHT!      Isi config.yml:!RST!
+    echo !WHT!      ----------------------------------------!RST!
+    type "%USERPROFILE%\.cloudflared\config.yml"
+    echo.
+    echo !WHT!      ----------------------------------------!RST!
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+echo !YEL!      [!] Config file belum ada. Membuat template...!RST!
+echo.
+
+REM Get tunnel ID
+echo !WHT!      Mencari Tunnel ID untuk: !TUNNEL_NAME!!RST!
+set "TUNNEL_ID="
+for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
+
+if "!TUNNEL_ID!"=="" (
+    echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
+    echo !YEL!      Buat tunnel dulu dengan opsi [4]!RST!
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+echo !GRN!      Tunnel ID: !TUNNEL_ID!!RST!
+echo.
+
+REM Create config directory if not exists
+if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
+
+REM Create config.yml
+(
+    echo tunnel: !TUNNEL_ID!
+    echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_ID!.json
+    echo.
+    echo ingress:
+    echo   - hostname: !TUNNEL_DOMAIN!
+    echo     service: http://localhost:8317
+    echo   - service: http_status:404
+) > "%USERPROFILE%\.cloudflared\config.yml"
+
+echo !GRN!      [OK] Config file berhasil dibuat!!RST!
+echo.
+echo !WHT!      Isi config.yml:!RST!
+echo !WHT!      ----------------------------------------!RST!
+type "%USERPROFILE%\.cloudflared\config.yml"
+echo.
+echo !WHT!      ----------------------------------------!RST!
+echo.
+pause
+goto install_cloudflared
+
+:cf_install_service
+echo.
+echo !YEL!      [!] Install service membutuhkan Administrator!!RST!
+echo !WHT!      Jika gagal, jalankan launcher sebagai Admin.!RST!
+echo.
+"!CLOUDFLARED_EXE!" service install
+echo.
+pause
+goto install_cloudflared
+
+:cf_uninstall_service
+echo.
+echo !YEL!      Menghapus service...!RST!
+"!CLOUDFLARED_EXE!" service uninstall
+echo.
+pause
+goto install_cloudflared
+
+:cf_start_service
+echo.
+echo !CYN!      Memulai service cloudflared...!RST!
+net start cloudflared
+echo.
+pause
+goto install_cloudflared
+
+:cf_stop_service
+echo.
+echo !YEL!      Menghentikan service cloudflared...!RST!
+net stop cloudflared
+echo.
+pause
 goto install_cloudflared
 
 :install_tunnel_service
