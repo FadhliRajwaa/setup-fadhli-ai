@@ -1188,20 +1188,7 @@ if "!TUNNEL_EXISTS!"=="" (
     echo !WHT!        [0] Kembali!RST!
     echo.
     set /p "tun_create_choice=      Pilih [0-2]: "
-    if "!tun_create_choice!"=="1" (
-        echo.
-        echo !CYN!      Login ke Cloudflare dulu...!RST!
-        "!CLOUDFLARED_EXE!" tunnel login
-        echo.
-        echo !CYN!      Membuat tunnel: !TUNNEL_NAME!!RST!
-        "!CLOUDFLARED_EXE!" tunnel create !TUNNEL_NAME!
-        echo.
-        echo !YEL!      [!] Setelah tunnel dibuat, setup DNS route di Cloudflare Dashboard!!RST!
-        echo !WHT!      Atau jalankan: cloudflared tunnel route dns !TUNNEL_NAME! !TUNNEL_DOMAIN!!RST!
-        echo.
-        pause
-        goto install_cloudflared
-    )
+    if "!tun_create_choice!"=="1" goto create_new_tunnel
     if "!tun_create_choice!"=="2" goto install_cloudflared
     goto cliproxyplus_manager
 )
@@ -1211,58 +1198,65 @@ echo !GRN!      [OK] Tunnel "!TUNNEL_NAME!" ditemukan (ID: !TUNNEL_EXISTS!)!RST!
 echo.
 
 REM Check if config.yml exists
-if not exist "%USERPROFILE%\.cloudflared\config.yml" (
-    echo !YEL!      [!] Config file tidak ditemukan!!RST!
-    echo !WHT!      Membuat config.yml otomatis...!RST!
-    echo.
-    
-    REM Create config directory if not exists
-    if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
-    
-    REM Create config.yml
-    (
-        echo tunnel: !TUNNEL_EXISTS!
-        echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_EXISTS!.json
-        echo.
-        echo ingress:
-        echo   - hostname: !TUNNEL_DOMAIN!
-        echo     service: http://localhost:8317
-        echo   - service: http_status:404
-    ) > "%USERPROFILE%\.cloudflared\config.yml"
-    
-    echo !GRN!      [OK] Config file berhasil dibuat!!RST!
-    echo.
-)
+if not exist "%USERPROFILE%\.cloudflared\config.yml" goto create_config_file
+goto check_cliproxy
 
+:create_config_file
+echo !YEL!      [!] Config file tidak ditemukan!!RST!
+echo !WHT!      Membuat config.yml otomatis...!RST!
+echo.
+
+REM Create config directory if not exists
+if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
+
+REM Create config.yml
+(
+    echo tunnel: !TUNNEL_EXISTS!
+    echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_EXISTS!.json
+    echo.
+    echo ingress:
+    echo   - hostname: !TUNNEL_DOMAIN!
+    echo     service: http://localhost:8317
+    echo   - service: http_status:404
+) > "%USERPROFILE%\.cloudflared\config.yml"
+
+echo !GRN!      [OK] Config file berhasil dibuat!!RST!
+echo.
+
+:check_cliproxy
 REM Check if CLIProxyAPIPlus is running
 set "CLIPROXY_RUNNING="
 for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8317.*LISTENING"') do (
     set "CLIPROXY_RUNNING=%%a"
 )
 
-if "!CLIPROXY_RUNNING!"=="" (
-    echo !YEL!  [!] CLIProxyAPIPlus belum berjalan di port 8317!RST!
-    echo !YEL!      Tunnel akan meneruskan ke port 8317, pastikan server aktif!!RST!
-    echo.
-    echo !WHT!      [1] Lanjutkan tetap start tunnel!RST!
-    echo !WHT!      [2] Start CLIProxyAPIPlus dulu!RST!
-    echo !WHT!      [0] Kembali!RST!
-    echo.
-    set /p "tun_choice=      Pilih [0-2]: "
-    if "!tun_choice!"=="0" goto cliproxyplus_manager
-    if "!tun_choice!"=="2" (
-        echo.
-        echo !CYN!      Jalankan di terminal terpisah:!RST!
-        echo !WHT!      cd %USERPROFILE%\cliproxyapiplus!RST!
-        echo !WHT!      .\cli-proxy-api-plus.exe!RST!
-        echo.
-        pause
-        goto cliproxyplus_manager
-    )
-) else (
-    echo !GRN!      [OK] CLIProxyAPIPlus aktif di port 8317 (PID: !CLIPROXY_RUNNING!)!RST!
-)
+if "!CLIPROXY_RUNNING!"=="" goto cliproxy_not_running
+echo !GRN!      [OK] CLIProxyAPIPlus aktif di port 8317 (PID: !CLIPROXY_RUNNING!)!RST!
+goto run_tunnel
 
+:cliproxy_not_running
+echo !YEL!  [!] CLIProxyAPIPlus belum berjalan di port 8317!RST!
+echo !YEL!      Tunnel akan meneruskan ke port 8317, pastikan server aktif!!RST!
+echo.
+echo !WHT!      [1] Lanjutkan tetap start tunnel!RST!
+echo !WHT!      [2] Start CLIProxyAPIPlus dulu!RST!
+echo !WHT!      [0] Kembali!RST!
+echo.
+set /p "tun_choice=      Pilih [0-2]: "
+if "!tun_choice!"=="0" goto cliproxyplus_manager
+if "!tun_choice!"=="2" goto show_cliproxy_instructions
+goto run_tunnel
+
+:show_cliproxy_instructions
+echo.
+echo !CYN!      Jalankan di terminal terpisah:!RST!
+echo !WHT!      cd %USERPROFILE%\cliproxyapiplus!RST!
+echo !WHT!      .\cli-proxy-api-plus.exe!RST!
+echo.
+pause
+goto cliproxyplus_manager
+
+:run_tunnel
 echo.
 echo !CYN!      Memulai Cloudflare Tunnel...!RST!
 echo !WHT!      Tekan Ctrl+C untuk menghentikan tunnel.!RST!
@@ -1270,6 +1264,20 @@ echo.
 "!CLOUDFLARED_EXE!" tunnel run !TUNNEL_NAME!
 pause
 goto cliproxyplus_manager
+
+:create_new_tunnel
+echo.
+echo !CYN!      Login ke Cloudflare dulu...!RST!
+"!CLOUDFLARED_EXE!" tunnel login
+echo.
+echo !CYN!      Membuat tunnel: !TUNNEL_NAME!!RST!
+"!CLOUDFLARED_EXE!" tunnel create !TUNNEL_NAME!
+echo.
+echo !YEL!      [!] Setelah tunnel dibuat, setup DNS route di Cloudflare Dashboard!!RST!
+echo !WHT!      Atau jalankan: cloudflared tunnel route dns !TUNNEL_NAME! !TUNNEL_DOMAIN!!RST!
+echo.
+pause
+goto start_tunnel
 
 :stop_tunnel
 cls
