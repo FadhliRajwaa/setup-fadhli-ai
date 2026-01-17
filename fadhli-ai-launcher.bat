@@ -9,9 +9,17 @@ set "CLIPROXY_DIR=%USERPROFILE%\cliproxyapiplus"
 set "CLIPROXY_STANDARD_BASE=%USERPROFILE%\cliproxyapi"
 set "CLIPROXY_ACCOUNTS=%USERPROFILE%\.cli-proxy-api"
 set "CLOUDFLARED_EXE="
-REM Detect cloudflared.exe location
+REM Detect cloudflared.exe location - check multiple locations
 if exist "C:\Program Files (x86)\cloudflared\cloudflared.exe" set "CLOUDFLARED_EXE=C:\Program Files (x86)\cloudflared\cloudflared.exe"
+if exist "C:\Program Files\cloudflared\cloudflared.exe" set "CLOUDFLARED_EXE=C:\Program Files\cloudflared\cloudflared.exe"
 if exist "C:\Program Files\Cloudflared\cloudflared.exe" set "CLOUDFLARED_EXE=C:\Program Files\Cloudflared\cloudflared.exe"
+REM Also check if cloudflared is in PATH
+if "!CLOUDFLARED_EXE!"=="" (
+    where cloudflared.exe >nul 2>&1
+    if !errorlevel! equ 0 (
+        for /f "delims=" %%i in ('where cloudflared.exe 2^>nul') do set "CLOUDFLARED_EXE=%%i"
+    )
+)
 
 REM ============================================================================
 REM CLOUDFLARE TUNNEL SETTINGS - EDIT THIS SECTION!
@@ -683,7 +691,7 @@ echo !MAG!  ::    === CLOUDFLARE TUNNEL ===                                     
 echo !MAG!  ::    [15] Start Cloudflare Tunnel         [api.fadproxy.my.id]         :: !RST!
 echo !MAG!  ::    [16] Stop Cloudflare Tunnel                                       :: !RST!
 echo !MAG!  ::    [17] Cek Status Tunnel                                            :: !RST!
-echo !MAG!  ::    [18] Install Tunnel as Service       [Auto-Start]                 :: !RST!
+echo !MAG!  ::    [18] Install/Setup Cloudflared       [winget/manual]              :: !RST!
 echo !WHT!  ::                                                                      :: !RST!
 echo !BLU!  ::    === UPDATE / INSTALL ===                                          :: !RST!
 echo !BLU!  ::    [19] Cek Versi Terbaru CLIProxyAPI                                :: !RST!
@@ -731,7 +739,7 @@ if "!ag_choice!"=="14" goto start_standard_server
 if "!ag_choice!"=="15" goto start_tunnel
 if "!ag_choice!"=="16" goto stop_tunnel
 if "!ag_choice!"=="17" goto tunnel_status
-if "!ag_choice!"=="18" goto install_tunnel_service
+if "!ag_choice!"=="18" goto install_cloudflared
 if "!ag_choice!"=="19" goto cliproxy_check_version
 if "!ag_choice!"=="20" goto cliproxy_update_plus
 if "!ag_choice!"=="21" goto cliproxy_update_standard
@@ -1142,6 +1150,7 @@ echo !MAG!  ====================================================================
 echo !MAG!  ::                   START CLOUDFLARE TUNNEL                            :: !RST!
 echo !WHT!  ========================================================================== !RST!
 echo.
+echo !WHT!      Tunnel: !TUNNEL_NAME!!RST!
 echo !WHT!      Domain: !TUNNEL_DOMAIN!!RST!
 echo.
 
@@ -1151,15 +1160,74 @@ if "!CLOUDFLARED_EXE!"=="" (
     echo !RED!  ::                  CLOUDFLARED TIDAK DITEMUKAN                         :: !RST!
     echo !WHT!  ========================================================================== !RST!
     echo.
-    echo !YEL!      Cloudflared tidak terinstall di lokasi standar:!RST!
-    echo !WHT!        - C:\Program Files (x86)\cloudflared\cloudflared.exe!RST!
-    echo !WHT!        - C:\Program Files\Cloudflared\cloudflared.exe!RST!
+    echo !YEL!      Cloudflared tidak terinstall di sistem.!RST!
     echo.
-    echo !CYN!      Install dengan perintah:!RST!
-    echo !WHT!        winget install Cloudflare.cloudflared!RST!
+    echo !CYN!      Pilih opsi:!RST!
+    echo !WHT!        [1] Install Cloudflared sekarang!RST!
+    echo !WHT!        [0] Kembali!RST!
     echo.
-    pause
+    set /p "cf_install_choice=      Pilih [0-1]: "
+    if "!cf_install_choice!"=="1" goto install_cloudflared
     goto cliproxyplus_manager
+)
+
+REM Check if tunnel exists
+set "TUNNEL_EXISTS="
+for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_EXISTS=%%t"
+
+if "!TUNNEL_EXISTS!"=="" (
+    echo !RED!  ========================================================================== !RST!
+    echo !RED!  ::                  TUNNEL TIDAK DITEMUKAN                              :: !RST!
+    echo !WHT!  ========================================================================== !RST!
+    echo.
+    echo !YEL!      Tunnel "!TUNNEL_NAME!" belum dibuat.!RST!
+    echo.
+    echo !CYN!      Pilih opsi:!RST!
+    echo !WHT!        [1] Buat tunnel baru dan setup config!RST!
+    echo !WHT!        [2] Buka menu Install/Setup Cloudflared!RST!
+    echo !WHT!        [0] Kembali!RST!
+    echo.
+    set /p "tun_create_choice=      Pilih [0-2]: "
+    if "!tun_create_choice!"=="1" (
+        echo.
+        echo !CYN!      Login ke Cloudflare dulu...!RST!
+        "!CLOUDFLARED_EXE!" tunnel login
+        echo.
+        echo !CYN!      Membuat tunnel: !TUNNEL_NAME!!RST!
+        "!CLOUDFLARED_EXE!" tunnel create !TUNNEL_NAME!
+        echo.
+        echo !YEL!      [!] Setelah tunnel dibuat, setup DNS route di Cloudflare Dashboard!!RST!
+        echo !WHT!      Atau jalankan: cloudflared tunnel route dns !TUNNEL_NAME! !TUNNEL_DOMAIN!!RST!
+        echo.
+        pause
+        goto install_cloudflared
+    )
+    if "!tun_create_choice!"=="2" goto install_cloudflared
+    goto cliproxyplus_manager
+)
+
+REM Check if config.yml exists
+if not exist "%USERPROFILE%\.cloudflared\config.yml" (
+    echo !YEL!      [!] Config file tidak ditemukan!!RST!
+    echo !WHT!      Membuat config.yml otomatis...!RST!
+    echo.
+    
+    REM Create config directory if not exists
+    if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
+    
+    REM Create config.yml
+    (
+        echo tunnel: !TUNNEL_EXISTS!
+        echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_EXISTS!.json
+        echo.
+        echo ingress:
+        echo   - hostname: !TUNNEL_DOMAIN!
+        echo     service: http://localhost:8317
+        echo   - service: http_status:404
+    ) > "%USERPROFILE%\.cloudflared\config.yml"
+    
+    echo !GRN!      [OK] Config file berhasil dibuat!!RST!
+    echo.
 )
 
 REM Check if CLIProxyAPIPlus is running
@@ -1170,15 +1238,15 @@ for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8317.*LISTENING"') d
 
 if "!CLIPROXY_RUNNING!"=="" (
     echo !YEL!  [!] CLIProxyAPIPlus belum berjalan di port 8317!RST!
-    echo !YEL!      Tunnel membutuhkan CLIProxyAPIPlus aktif!!RST!
+    echo !YEL!      Tunnel akan meneruskan ke port 8317, pastikan server aktif!!RST!
     echo.
-    echo !WHT!      [1] Start CLIProxyAPIPlus dulu di terminal lain!RST!
-    echo !WHT!      [2] Lanjutkan tanpa CLIProxyAPIPlus!RST!
+    echo !WHT!      [1] Lanjutkan tetap start tunnel!RST!
+    echo !WHT!      [2] Start CLIProxyAPIPlus dulu!RST!
     echo !WHT!      [0] Kembali!RST!
     echo.
     set /p "tun_choice=      Pilih [0-2]: "
     if "!tun_choice!"=="0" goto cliproxyplus_manager
-    if "!tun_choice!"=="1" (
+    if "!tun_choice!"=="2" (
         echo.
         echo !CYN!      Jalankan di terminal terpisah:!RST!
         echo !WHT!      cd %USERPROFILE%\cliproxyapiplus!RST!
@@ -1187,9 +1255,10 @@ if "!CLIPROXY_RUNNING!"=="" (
         pause
         goto cliproxyplus_manager
     )
+) else (
+    echo !GRN!      [OK] CLIProxyAPIPlus aktif di port 8317 (PID: !CLIPROXY_RUNNING!)!RST!
 )
 
-echo !GRN!      CLIProxyAPIPlus aktif di port 8317!!RST!
 echo.
 echo !CYN!      Memulai Cloudflare Tunnel...!RST!
 echo !WHT!      Tekan Ctrl+C untuk menghentikan tunnel.!RST!
@@ -1285,64 +1354,232 @@ if "!dash_choice!"=="3" (
 )
 goto cliproxyplus_manager
 
-:install_tunnel_service
+:install_cloudflared
 cls
 echo.
 echo !MAG!  ========================================================================== !RST!
-echo !MAG!  ::             INSTALL TUNNEL AS WINDOWS SERVICE                        :: !RST!
+echo !MAG!  ::              INSTALL / SETUP CLOUDFLARED                             :: !RST!
 echo !WHT!  ========================================================================== !RST!
 echo.
 
-REM Check if cloudflared is installed
+REM Show current cloudflared status
 if "!CLOUDFLARED_EXE!"=="" (
-    echo !RED!      [X] Cloudflared tidak ditemukan!!RST!
-    echo !YEL!      Install dengan: winget install Cloudflare.cloudflared!RST!
+    echo !RED!      [X] Cloudflared: TIDAK TERINSTALL!RST!
+) else (
+    echo !GRN!      [OK] Cloudflared: !CLOUDFLARED_EXE!!RST!
+    for /f "tokens=*" %%v in ('"!CLOUDFLARED_EXE!" --version 2^>nul') do echo !CYN!          %%v!RST!
+)
+echo.
+echo !WHT!  ========================================================================== !RST!
+echo !WHT!  ::    === INSTALL CLOUDFLARED ===                                       :: !RST!
+echo !WHT!  ::    [1]  Install via Winget              [Recommended]                :: !RST!
+echo !WHT!  ::    [2]  Download Manual                 [Browser]                    :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !CYN!  ::    === TUNNEL CONFIGURATION ===                                      :: !RST!
+echo !CYN!  ::    [3]  Login Cloudflare                [Browser Auth]               :: !RST!
+echo !CYN!  ::    [4]  Buat Tunnel Baru                [Create Tunnel]              :: !RST!
+echo !CYN!  ::    [5]  List Tunnel yang Ada                                         :: !RST!
+echo !CYN!  ::    [6]  Setup Config Tunnel             [config.yml]                 :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !YEL!  ::    === WINDOWS SERVICE ===                                           :: !RST!
+echo !YEL!  ::    [7]  Install as Service              [Auto-Start]                 :: !RST!
+echo !YEL!  ::    [8]  Uninstall Service                                            :: !RST!
+echo !YEL!  ::    [9]  Start Service                                                :: !RST!
+echo !YEL!  ::    [10] Stop Service                                                 :: !RST!
+echo !WHT!  ::                                                                      :: !RST!
+echo !WHT!  ::    [0]  Kembali                                                      :: !RST!
+echo !WHT!  ========================================================================== !RST!
+echo.
+set /p "cf_choice=      Pilih [0-10]: "
+
+if "!cf_choice!"=="" goto install_cloudflared
+if "!cf_choice!"=="0" goto cliproxyplus_manager
+
+REM Option 1: Install via Winget
+if "!cf_choice!"=="1" (
+    echo.
+    echo !CYN!      Menginstall Cloudflared via Winget...!RST!
+    echo.
+    winget install Cloudflare.cloudflared
+    echo.
+    echo !YEL!      [!] Restart launcher untuk mendeteksi cloudflared yang baru diinstall!RST!
     echo.
     pause
-    goto cliproxyplus_manager
+    goto install_cloudflared
 )
 
-echo !YEL!      [!] Ini akan menginstall Cloudflare Tunnel sebagai Windows Service!RST!
-echo !YEL!          Tunnel akan otomatis jalan saat Windows startup.!RST!
-echo.
-echo !WHT!      [1] Install Service (Membutuhkan Admin)!RST!
-echo !WHT!      [2] Uninstall Service!RST!
-echo !WHT!      [3] Start Service!RST!
-echo !WHT!      [4] Stop Service!RST!
-echo !WHT!      [0] Kembali!RST!
-echo.
-set /p "svc_choice=      Pilih [0-4]: "
-
-if "!svc_choice!"=="0" goto cliproxyplus_manager
-if "!svc_choice!"=="1" (
+REM Option 2: Download Manual
+if "!cf_choice!"=="2" (
     echo.
-    echo !CYN!      Menginstall service... (Jalankan sebagai Administrator^)!RST!
+    echo !CYN!      Membuka halaman download Cloudflared...!RST!
+    start "" "https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/"
+    echo.
+    echo !WHT!      Download cloudflared-windows-amd64.exe!RST!
+    echo !WHT!      Rename ke cloudflared.exe!RST!
+    echo !WHT!      Taruh di C:\Program Files (x86)\cloudflared\!RST!
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Check cloudflared for options 3-10
+if "!CLOUDFLARED_EXE!"=="" (
+    echo.
+    echo !RED!      [X] Cloudflared belum terinstall!!RST!
+    echo !YEL!      Pilih opsi [1] atau [2] untuk install dulu.!RST!
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Option 3: Login Cloudflare
+if "!cf_choice!"=="3" (
+    echo.
+    echo !CYN!      Membuka browser untuk login ke Cloudflare...!RST!
+    echo !WHT!      Ikuti instruksi di browser untuk authorize.!RST!
+    echo.
+    "!CLOUDFLARED_EXE!" tunnel login
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Option 4: Create Tunnel
+if "!cf_choice!"=="4" (
+    echo.
+    echo !CYN!      Buat Tunnel Baru!RST!
+    echo.
+    set /p "new_tunnel_name=      Nama tunnel (default: !TUNNEL_NAME!): "
+    if "!new_tunnel_name!"=="" set "new_tunnel_name=!TUNNEL_NAME!"
+    echo.
+    echo !WHT!      Membuat tunnel: !new_tunnel_name!!RST!
+    "!CLOUDFLARED_EXE!" tunnel create !new_tunnel_name!
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Option 5: List Tunnels
+if "!cf_choice!"=="5" (
+    echo.
+    echo !CYN!      Daftar Tunnel yang Ada:!RST!
+    echo.
+    "!CLOUDFLARED_EXE!" tunnel list
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Option 6: Setup Config
+if "!cf_choice!"=="6" (
+    echo.
+    echo !CYN!      Setup Config Tunnel!RST!
+    echo.
+    echo !WHT!      Config file lokasi: %USERPROFILE%\.cloudflared\config.yml!RST!
+    echo.
+    
+    if exist "%USERPROFILE%\.cloudflared\config.yml" (
+        echo !GRN!      [OK] Config file sudah ada!!RST!
+        echo.
+        echo !WHT!      Isi config.yml:!RST!
+        echo !WHT!      ----------------------------------------!RST!
+        type "%USERPROFILE%\.cloudflared\config.yml"
+        echo.
+        echo !WHT!      ----------------------------------------!RST!
+    ) else (
+        echo !YEL!      [!] Config file belum ada. Membuat template...!RST!
+        echo.
+        
+        REM Get tunnel ID
+        echo !WHT!      Mencari Tunnel ID untuk: !TUNNEL_NAME!!RST!
+        set "TUNNEL_ID="
+        for /f "tokens=1" %%t in ('"!CLOUDFLARED_EXE!" tunnel list 2^>nul ^| findstr /I "!TUNNEL_NAME!"') do set "TUNNEL_ID=%%t"
+        
+        if "!TUNNEL_ID!"=="" (
+            echo !RED!      [X] Tunnel !TUNNEL_NAME! tidak ditemukan!!RST!
+            echo !YEL!      Buat tunnel dulu dengan opsi [4]!RST!
+        ) else (
+            echo !GRN!      Tunnel ID: !TUNNEL_ID!!RST!
+            echo.
+            
+            REM Create config directory if not exists
+            if not exist "%USERPROFILE%\.cloudflared" mkdir "%USERPROFILE%\.cloudflared"
+            
+            REM Create config.yml
+            (
+                echo tunnel: !TUNNEL_ID!
+                echo credentials-file: %USERPROFILE%\.cloudflared\!TUNNEL_ID!.json
+                echo.
+                echo ingress:
+                echo   - hostname: !TUNNEL_DOMAIN!
+                echo     service: http://localhost:8317
+                echo   - service: http_status:404
+            ) > "%USERPROFILE%\.cloudflared\config.yml"
+            
+            echo !GRN!      [OK] Config file berhasil dibuat!!RST!
+            echo.
+            echo !WHT!      Isi config.yml:!RST!
+            echo !WHT!      ----------------------------------------!RST!
+            type "%USERPROFILE%\.cloudflared\config.yml"
+            echo.
+            echo !WHT!      ----------------------------------------!RST!
+        )
+    )
+    echo.
+    pause
+    goto install_cloudflared
+)
+
+REM Option 7: Install Service
+if "!cf_choice!"=="7" (
+    echo.
+    echo !YEL!      [!] Install service membutuhkan Administrator!!RST!
+    echo !WHT!      Jika gagal, jalankan launcher sebagai Admin.!RST!
+    echo.
     "!CLOUDFLARED_EXE!" service install
     echo.
     pause
+    goto install_cloudflared
 )
-if "!svc_choice!"=="2" (
+
+REM Option 8: Uninstall Service
+if "!cf_choice!"=="8" (
     echo.
     echo !YEL!      Menghapus service...!RST!
     "!CLOUDFLARED_EXE!" service uninstall
     echo.
     pause
+    goto install_cloudflared
 )
-if "!svc_choice!"=="3" (
+
+REM Option 9: Start Service
+if "!cf_choice!"=="9" (
     echo.
-    echo !CYN!      Memulai service...!RST!
+    echo !CYN!      Memulai service cloudflared...!RST!
     net start cloudflared
     echo.
     pause
+    goto install_cloudflared
 )
-if "!svc_choice!"=="4" (
+
+REM Option 10: Stop Service
+if "!cf_choice!"=="10" (
     echo.
-    echo !YEL!      Menghentikan service...!RST!
+    echo !YEL!      Menghentikan service cloudflared...!RST!
     net stop cloudflared
     echo.
     pause
+    goto install_cloudflared
 )
-goto cliproxyplus_manager
+
+echo.
+echo !RED!      [X] Pilihan tidak valid!!RST!
+timeout /t 2 >nul
+goto install_cloudflared
+
+:install_tunnel_service
+REM Legacy redirect - redirect to new menu
+goto install_cloudflared
 
 REM ============================================================================
 REM                     UPDATE / INSTALL FUNCTIONS
